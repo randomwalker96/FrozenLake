@@ -27,6 +27,8 @@ rewards_all_episodes = []
 
 for episode in range(num_episodes):
     state = env.reset()
+    state = state[0]
+    # print('state is ', state)
     done = False
     rewards_current_episode = 0
     # print("episode: ", episode)
@@ -38,11 +40,13 @@ for episode in range(num_episodes):
         else:                                                    # explore
             action = env.action_space.sample()
 
-        new_state, reward, done, info = env.step(action)
+        # print(env.step(action))
+        new_state, reward, done, info, trans_prob = env.step(action)
         # print("current state ",state)
         # print("new state ",new_state)
         # print(reward)
-        #print(info)
+        # print(info)
+        # print(action)
 
         q_table[state,action] = q_table[state,action] * (1 - learning_rate) + \
                                 learning_rate * (reward + discount_rate * np.max(q_table[new_state,:]))

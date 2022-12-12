@@ -4,8 +4,9 @@ import random
 import time
 from IPython.display import clear_output
 import pickle
+import pygame
 
-env = gym.make('FrozenLake-v1')
+env = gym.make('FrozenLake-v1', render_mode="human")
 
 action_space_size = env.action_space.n          # number of actions
 state_space_size = env.observation_space.n       # number of states
@@ -18,15 +19,16 @@ q_table = pickle.load(open("qtable.pkl", "rb"))
 
 for episode in range(1):
     state = env.reset()
+    state = state[0]
     done = False
     time.sleep(1)
     for i in range(max_num_of_steps):
         env.render()
         time.sleep(3)
         action = np.argmax(q_table[state,:])
-        state, reward, done, info = env.step(action)
+        state, reward, done, info, trans_prob = env.step(action)
         if done:
-            # env.render()
+            env.render()
             print("Finished after {} timesteps".format(i+1))
             time.sleep(3)
             break
